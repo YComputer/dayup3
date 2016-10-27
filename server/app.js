@@ -8,6 +8,7 @@ var favicon = require('serve-favicon');
 
 var app = express();
 
+// middleware
 app.use(favicon(path.join(__dirname, '../client/static', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
@@ -15,6 +16,20 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '../client/static')));
 
+// development
+import webpack from 'webpack';
+import webpackMiddleware from 'webpack-dev-middleware';
+import webpackHotMiddleware from 'webpack-hot-middleware';
+import webpackConfig from '../webpack.config.dev';
+const compiler = webpack(webpackConfig);
+app.use(webpackMiddleware(compiler, {
+  hot: true,
+  publicPath: webpackConfig.output.publicPath,
+  noInfo: true
+}));
+app.use(webpackHotMiddleware(compiler));
+
+// routes
 app.use('/', require('./routes/index'));
 
 
