@@ -28,6 +28,7 @@ app.use(webpackMiddleware(compiler, {
   noInfo: true
 }));
 app.use(webpackHotMiddleware(compiler));
+// development
 
 // routes
 app.use('/', require('./routes/index'));
