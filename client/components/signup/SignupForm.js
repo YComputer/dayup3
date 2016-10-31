@@ -1,4 +1,5 @@
 import React from 'react';
+import classnames from 'classnames';
 
 class SignupForm extends React.Component {
     constructor(props){
@@ -7,7 +8,9 @@ class SignupForm extends React.Component {
             phone: '',
             password: '',
             passwordConfirmation: '',
-            phoneVerifyCode: ''
+            phoneVerifyCode: '',
+            errors: {},
+            isLoading: false
         };
 
         this.onChange = this.onChange.bind(this);
@@ -20,13 +23,18 @@ class SignupForm extends React.Component {
 
     onSubmit(e){
         e.preventDefault();
-        this.props.userSignupRequest(this.state);
+        this.setState({errors:{}, isLoading: true});// 每次提交后都要清空errors
+        this.props.userSignupRequest(this.state).then(
+            () => {},
+            ({data}) => {this.setState({errors: data, isLoading: false})}
+        );
     }
 
     render() {
+        const {errors} = this.state;
         return (
             <form onSubmit={this.onSubmit}>
-                <div className="form-group">
+                <div className={classnames("form-group", {"has-error": errors.phone})}>
                     <label className="control-label">手机号码</label>
                     <input
                         className="form-control"
@@ -35,9 +43,10 @@ class SignupForm extends React.Component {
                         type="text"
                         name="phone"
                     />
+                    {errors.phone && <span className="help-block">{errors.phone}</span>}
                 </div>
 
-                <div className="form-group">
+                <div className={classnames("form-group", {"has-error": errors.password})}>
                     <label className="control-label">密码</label>
                     <input
                         className="form-control"
@@ -46,10 +55,11 @@ class SignupForm extends React.Component {
                         type="password"
                         name="password"
                     />
+                    {errors.password && <span className="help-block">{errors.password}</span>}
                 </div>
 
-                <div className="form-group">
-                    <label className="control-label">密码确认</label>
+                <div className={classnames("form-group", {"has-error": errors.passwordConfirmation})}>
+                <label className="control-label">密码确认</label>
                     <input
                         className="form-control"
                         value={this.state.passwordConfirmation}
@@ -57,10 +67,11 @@ class SignupForm extends React.Component {
                         type="password"
                         name="passwordConfirmation"
                     />
+                    {errors.passwordConfirmation && <span className="help-block">{errors.passwordConfirmation}</span>}
                 </div>
 
-                <div className="form-group">
-                    <label className="control-label">验证码</label>
+                <div className={classnames("form-group", {"has-error": errors.phoneVerifyCode})}>
+                <label className="control-label">验证码</label>
                     <input
                         className="form-control"
                         value={this.state.phoneVerifyCode}
@@ -68,13 +79,14 @@ class SignupForm extends React.Component {
                         type="text"
                         name="phoneVerifyCode"
                     />
+                    {errors.phoneVerifyCode && <span className="help-block">{errors.phoneVerifyCode}</span>}
                     <button>
                         发送验证码
                     </button>
                 </div>
 
                 <div className="form-group">
-                    <button className="btn btn-primary">
+                    <button disabled={this.state.isLoading} className="btn btn-primary">
                         注册
                     </button>
                 </div>

@@ -16,7 +16,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '../client/static')));
 
-// development
+// ↓↓↓↓↓ development ↓↓↓↓↓
 import webpack from 'webpack';
 import webpackMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
@@ -28,10 +28,13 @@ app.use(webpackMiddleware(compiler, {
   noInfo: true
 }));
 app.use(webpackHotMiddleware(compiler));
-// development
+// ↑↑↑↑↑ development ↑↑↑↑↑
 
 // routes
-app.use('/', require('./routes/index'));
+import index from './routes/index';
+import users from './routes/users';
+app.use('/', index);
+app.use('/api/users', users);
 
 
 // －－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－
@@ -47,20 +50,22 @@ app.use(function(req, res, next) {
 if (app.get('env') === 'development') {
   app.use(function(err, req, res) {
     res.status(err.status || 500);
-    res.render('error', {
-      message: err.message,
-      error: err
-    });
+    res.json(err);
+    // res.render('error', {
+    //   message: err.message,
+    //   error: err
+    // });
   });
 }
 
 // production error handler no stacktraces leaked to user
 app.use(function(err, req, res) {
   res.status(err.status || 500);
-  res.render('error', {
-    message: err.message,
-    error: {}
-  });
+  res.json(err);
+  // res.render('error', {
+  //   message: err.message,
+  //   error: {}
+  // });
 });
 
 module.exports = app;
