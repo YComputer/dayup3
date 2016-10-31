@@ -4,14 +4,14 @@ import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 
 import App from './App';
 import Home from './Home';
-import SigupContainer from './signup/SignupContainer';
+import SignupPage from './signup/SignupPage';
 
 const Root = ({ store }) => (
     <Provider store={store}>
         <Router history={browserHistory}>
             <Route path="/" component={App}>
                 <IndexRoute component={Home} />
-                <Route path="signup" component={SigupContainer} />
+                <Route path="signup" component={SignupPage} />
             </Route>
         </Router>
     </Provider>
