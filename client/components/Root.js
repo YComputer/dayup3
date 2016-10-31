@@ -6,13 +6,18 @@ import App from './App';
 import Home from './Home';
 import SignupPage from './signup/SignupPage';
 
+// 这样写的原因 http://stackoverflow.com/questions/34760825/react-route-react-hot-loader-webpack-you-cannot-change-router-routes-it-will
+const routes = (
+    <Route path="/" component={App}>
+        <IndexRoute component={Home} />
+        <Route path="signup" component={SignupPage} />
+    </Route>
+);
+
 const Root = ({ store }) => (
     <Provider store={store}>
         <Router history={browserHistory}>
-            <Route path="/" component={App}>
-                <IndexRoute component={Home} />
-                <Route path="signup" component={SignupPage} />
-            </Route>
+            {routes}
         </Router>
     </Provider>
 );
