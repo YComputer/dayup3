@@ -1,6 +1,7 @@
 import React from 'react';
 import TextFieldGroup from '../common/TextFieldGroup';
 import validateInput from '../../../shared/validations/signup';
+import { browserHistory } from 'react-router';
 
 class SignupForm extends React.Component {
     constructor(props){
@@ -37,8 +38,15 @@ class SignupForm extends React.Component {
         if (this.isValid()){
             this.setState({errors:{}, isLoading: true});// 每次提交后都要清空errors
             this.props.userSignupRequest(this.state).then(
-                () => {},
-                ({data}) => {this.setState({errors: data, isLoading: false})}
+                ({data}) => {
+                    // console.log(data);
+                    // 两种方法都可以，第二种需要指定SignupForm.contextTypes
+                    // browserHistory.push('/');
+                    this.context.router.push('/');
+                },
+                ({data}) => {
+                    this.setState({errors: data, isLoading: false})
+                }
             );
         }
     }
@@ -103,5 +111,10 @@ class SignupForm extends React.Component {
 SignupForm.propTypes = {
     userSignupRequest: React.PropTypes.func.isRequired
 };
+
+
+SignupForm.contextTypes = {
+    router: React.PropTypes.object.isRequired
+}
 
 export default SignupForm;
