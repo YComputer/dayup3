@@ -15,6 +15,6 @@ const NavigationBar = () => (
             </div>
         </div>
     </nav>
-)
+);
 
 export default NavigationBar;
