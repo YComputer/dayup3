@@ -40,6 +40,12 @@ class SignupForm extends React.Component {
             this.props.userSignupRequest(this.state).then(
                 ({data}) => {
                     // console.log(data);
+                    // 发送登录成功的action
+                    this.props.addFlashMessage({
+                        type: 'signup_success',
+                        text: '注册成功，欢迎你。'
+                    });
+
                     // 两种方法都可以，第二种需要指定SignupForm.contextTypes
                     // browserHistory.push('/');
                     this.context.router.push('/');
@@ -109,7 +115,8 @@ class SignupForm extends React.Component {
 }
 
 SignupForm.propTypes = {
-    userSignupRequest: React.PropTypes.func.isRequired
+    userSignupRequest: React.PropTypes.func.isRequired,
+    addFlashMessage: React.PropTypes.func.isRequired
 };
 
 
