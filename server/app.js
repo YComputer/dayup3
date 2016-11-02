@@ -1,4 +1,5 @@
 var express = require('express');
+var compression = require('compression');
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
@@ -7,6 +8,11 @@ var bodyParser = require('body-parser');
 var favicon = require('serve-favicon');
 
 var app = express();
+
+// must be first!
+if (app.get('env') === 'production') {
+  app.use(compression())
+}
 
 // middleware
 app.use(favicon(path.join(__dirname, '../client/static', 'favicon.ico')));
