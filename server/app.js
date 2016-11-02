@@ -21,13 +21,15 @@ import webpack from 'webpack';
 import webpackMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
 import webpackConfig from '../webpack.config.dev';
-const compiler = webpack(webpackConfig);
-app.use(webpackMiddleware(compiler, {
-  hot: true,
-  publicPath: webpackConfig.output.publicPath,
-  noInfo: true
-}));
-app.use(webpackHotMiddleware(compiler));
+if (app.get('env') === 'development') {
+  const compiler = webpack(webpackConfig);
+  app.use(webpackMiddleware(compiler, {
+    hot: true,
+    publicPath: webpackConfig.output.publicPath,
+    noInfo: true
+  }));
+  app.use(webpackHotMiddleware(compiler));
+}
 // ↑↑↑↑↑ development ↑↑↑↑↑
 
 // routes
